@@ -1,0 +1,53 @@
+name: 06 - Contexts
+run-name: 06 - Contexts | Debug - ${{inputs.debug}}
+
+on: 
+  push:
+  workflow_dispatch:
+    inputs:
+      debug:
+        type: boolean
+        default: false
+
+env:
+  MY_WORKFLOW_VAR: "workflow"
+  MY_OVERWRITTEN_VAR: "workflow"
+
+jobs:
+  echo-data:
+    runs-on: ubuntu-latest
+    env:
+      MY_JOB_VAR: "jobs"
+      MY_OVERWRITTEN_VAR: "jobs"
+    steps:
+      - name: Display Information
+        run:  |
+          echo "Event name: ${{github.event_name}}" 
+          echo "Ref: ${{github.ref_name}}"
+          echo "SHA: ${{github.sha}}"
+          echo "Actor: ${{github.actor}}"
+          echo "Workflow: ${{github.workflow}}"
+          echo "Run ID: ${{github.run_id}}"
+          echo "Run number: ${{github.run_number}}"
+      - name: Retrieve Variable
+        run: | 
+          echo "Variable value ${{vars.MY_VAR}}"
+      - name: Prints env variables
+        env:
+          MY_OVERWRITTEN_VAR: "steps"
+        run: |
+          echo "Workflows envs ${{env.MY_WORKFLOW_VAR}}"
+          echo "Overwritten envs ${{env.MY_OVERWRITTEN_VAR}}"
+      - name: Prints env variables
+        run: |
+         echo "Workflows envs ${{env.MY_WORKFLOW_VAR}}"
+         echo "Overwritten envs ${{env.MY_OVERWRITTEN_VAR}}"
+  echo-data2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Env variables
+        run: |
+          echo "Workflows envs $MY_WORKFLOW_VAR"
+          echo "Overwritten envs $MY_OVERWRITTEN_VAR"
+
+
